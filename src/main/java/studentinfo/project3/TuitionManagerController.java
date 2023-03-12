@@ -255,26 +255,25 @@ public class TuitionManagerController {
         RadioButton selectedRadioButton = (RadioButton) isResident.getSelectedToggle();
         if((selectedRadioButton).getText().equals("Non-Resident")) {
             neither.setDisable(false);
-            neither.setSelected(false);
             ct.setDisable(false);
-            ct.setSelected(false);
             ny.setDisable(false);
-            ny.setSelected(false);
             tristate.setDisable((false));
-            tristate.setSelected(false);
             studyabroad.setDisable(false);
-            studyabroad.setSelected(false);
             international.setDisable(false);
-            international.setSelected(false);
             neither.setDisable(false);
-            neither.setSelected(false);
         } else {
-            ct.setDisable(true);
-            ny.setDisable(true);
-            tristate.setDisable((true));
-            studyabroad.setDisable(true);
-            international.setDisable(true);
             neither.setDisable(true);
+            neither.setSelected(false);
+            ct.setDisable(true);
+            ct.setSelected(false);
+            ny.setDisable(true);
+            ny.setSelected(false);
+            tristate.setDisable((true));
+            tristate.setSelected(false);
+            studyabroad.setDisable(true);
+            studyabroad.setSelected(false);
+            international.setDisable(true);
+            international.setSelected(false);
         }
     }
 
