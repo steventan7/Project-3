@@ -117,7 +117,7 @@ public class Roster {
 
         String rosterList = "";
         for(int i = 0; i < size; i++) {
-            rosterList += roster[i] + "\n";
+            rosterList += roster[i] + "#";
         }
         return rosterList;
     }
