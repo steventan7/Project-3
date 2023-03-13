@@ -44,7 +44,7 @@ public class TuitionManagerController {
      * the specified data fields
      */
     @FXML
-    void add(ActionEvent event) {
+    void addStudent(ActionEvent event) {
         try {
             String typeOfStudent = ((RadioButton) isResident.getSelectedToggle()).getText();
             if (typeOfStudent.equals("Resident")) {
@@ -184,8 +184,16 @@ public class TuitionManagerController {
      * If the student is not found or the specified details are incorrect, an error message appears
      */
     @FXML
-    void remove(ActionEvent event) {
-
+    void removeStudent(ActionEvent event) {
+        Profile profileToRemove = readProfile();
+        Student studentToRemove = new Resident(profileToRemove, Major.CS, 0, 0);
+        if (studentToRemove.studentProfile() != null) {
+            if (studentRoster.remove(studentToRemove)) {
+                output.setText(studentToRemove.studentProfile() + " removed from the roster.");
+            } else {
+                output.setText(studentToRemove.studentProfile() + " is not in the roster.");
+            }
+        }
     }
 
     /**
@@ -209,6 +217,21 @@ public class TuitionManagerController {
         return new Profile(firstName, lastName, studentDOB);
     }
 
+    /**
+     * This method changes the student's major, given the student's profile and the new major
+     */
+    @FXML
+    void changeStudentMajor(ActionEvent event) {
+        Profile checkProfile = readProfile();
+        String newMajor = ((RadioButton) major.getSelectedToggle()).getText();
+        Student targetStudent = new Resident(checkProfile, Major.CS, 0, 0);
+        if(studentRoster.contains(targetStudent)) {
+            studentRoster.changeMajor(targetStudent, newMajor);
+            output.setText(checkProfile + " major changed to " + newMajor);
+        } else {
+            output.setText(checkProfile + " is not in the roster.");
+        }
+    }
     /**
      * Checks whether the argument String is in the correct calendar date
      * format (mm/dd/yyyy) with numeric values for day, month, and year.
@@ -296,7 +319,7 @@ public class TuitionManagerController {
             ny.setDisable(true);
             ny.setSelected(false);
         } else {
-            studyabroad.setDisable(false);
+            studyabroad.setDisable(true);
             studyabroad.setSelected(false);
             ct.setDisable(true);
             ct.setSelected(false);

@@ -133,9 +133,9 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Button fx:id="addStudent" mnemonicParsing="false" onAction="#add" prefHeight="26.0" prefWidth="94.4" text="Add" GridPane.halignment="LEFT" />
-                              <Button fx:id="removeStudent" mnemonicParsing="false" prefWidth="94.4" text="Remove" GridPane.columnIndex="1" />
-                              <Button fx:id="changeMajor" mnemonicParsing="false" prefWidth="94.4" text="Change Major" GridPane.columnIndex="2" />
+                              <Button fx:id="addStudent" mnemonicParsing="false" onAction="#addStudent" prefHeight="26.0" prefWidth="94.4" text="Add" GridPane.halignment="LEFT" />
+                              <Button fx:id="removeStudent" mnemonicParsing="false" onAction="#removeStudent" prefWidth="94.4" text="Remove" GridPane.columnIndex="1" />
+                              <Button fx:id="changeMajor" mnemonicParsing="false" onAction="#changeStudentMajor" prefWidth="94.4" text="Change Major" GridPane.columnIndex="2" />
                               <Button fx:id="loadFromFile" mnemonicParsing="false" text="Load From File" GridPane.columnIndex="3" />
                            </children>
                            <padding>
