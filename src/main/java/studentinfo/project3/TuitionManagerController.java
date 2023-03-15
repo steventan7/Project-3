@@ -12,7 +12,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.Alert.AlertType;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -23,7 +22,7 @@ public class TuitionManagerController {
     private Button addStudent, removeStudent, changeMajor, loadSchedule;
 
     @FXML
-    private RadioButton international, tristate, neither, ny, ct;
+    private RadioButton resident, nonresident, international, tristate, neither, ny, ct;
 
     @FXML
     private CheckBox studyabroad;
@@ -289,7 +288,6 @@ public class TuitionManagerController {
             tristate.setDisable((false));
             studyabroad.setDisable(false);
             international.setDisable(false);
-            neither.setDisable(false);
         } else {
             neither.setDisable(true);
             neither.setSelected(false);
