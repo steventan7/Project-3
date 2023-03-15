@@ -28,7 +28,7 @@ public class TuitionManagerController {
     private CheckBox studyabroad;
 
     @FXML
-    private TextField firstname, lastname, creditscompleted;
+    private TextField firstname, lastname, creditscompleted, enrollingCredits, scholarshipAmount;
 
     @FXML
     private TextArea output;
@@ -40,7 +40,12 @@ public class TuitionManagerController {
     private ToggleGroup major, isResident, state, homeplace;
 
     public static final String [] COMMANDS = new String [] {"R", "N", "T", "I"};
+    public static final String [] STUDENTTYPE = new String [] {"Resident", "Tri-state",
+            "International student", "Non-Resident"};
+    public static final String STUDYABROAD = "study abroad";
     public static final int SIXTEENYEARS = 16;
+    public static final int FULLTIMECREDITMIN = 12;
+    public static final int MAXAMOUNT = 10000;
     private static Roster studentRoster = new Roster();
     private static Enrollment studentEnrollment = new Enrollment();
 
@@ -155,7 +160,80 @@ public class TuitionManagerController {
             }
         }
     }
-
+    @FXML
+    private void enrollStudent(ActionEvent event) {
+        Profile profileToEnroll = readProfile();
+        if(profileToEnroll != null) {
+            Student checkStudent = studentRoster.student(new Resident(profileToEnroll, Major.CS,
+                    0, 0));
+            if(checkStudent == null) {
+                output.setText("Cannot enroll: " + profileToEnroll + " is not in the roster.");
+                return;
+            }
+            int creditsEnrolling = readEnrolledCredits(checkStudent, enrollingCredits.getText());
+            if(creditsEnrolling != -1) {
+                EnrollStudent newEnrolled = new EnrollStudent(profileToEnroll, creditsEnrolling);
+                studentEnrollment.add(newEnrolled);
+                output.setText(newEnrolled.studentProfile() + " enrolled " + creditsEnrolling + " credits");
+            }
+        }
+    }
+    @FXML
+    private void dropStudent(ActionEvent event) {
+        Profile profileToDrop = readProfile();
+        if(profileToDrop != null) {
+            EnrollStudent studentToDrop = new EnrollStudent(profileToDrop, 0);
+            if(studentEnrollment.contains(studentToDrop)) {
+                studentEnrollment.remove(studentToDrop);
+                System.out.println(studentToDrop.studentProfile() + " dropped.");
+                return;
+            }
+            System.out.println(profileToDrop + " is not enrolled.");
+        }
+    }
+    @FXML
+    private void awardScholarship(ActionEvent event) {
+        Profile profileToAward = readProfile();
+        String scholarship = scholarshipAmount.getText();
+        if(profileToAward != null && isNumeric(scholarship)) {
+            int amount = Integer.parseInt(scholarship);
+            Resident residentToAward = isScholarshipEligible(profileToAward);
+            if(0 < amount && amount <= MAXAMOUNT) {
+                if (residentToAward != null) {
+                    residentToAward.setScholarship(Integer.parseInt(scholarship));
+                    output.setText(profileToAward + ": scholarship amount updated.");
+                }
+            } else {
+                output.setText(amount + ": invalid amount.");
+            }
+        } else {
+            output.setText("Amount is not an integer.");
+        }
+    }
+    private Resident isScholarshipEligible(Profile checkProfile) {
+        Student studentToAward = new Resident(checkProfile, Major.CS, 0, 0);
+        studentToAward = studentRoster.student(studentToAward);
+        if(studentToAward != null) {
+            if(studentToAward.isResident()) {
+                EnrollStudent dummyObj = new EnrollStudent(studentToAward.studentProfile(), 0);
+                dummyObj = studentEnrollment.enrolledStudent(dummyObj);
+                if(dummyObj != null &&
+                        studentEnrollment.enrolledStudent(dummyObj).credits() >= FULLTIMECREDITMIN) {
+                    return (Resident) studentToAward;
+                } else if(dummyObj != null) {
+                    output.setText(checkProfile + " part time student is not eligible for the scholarship.");
+                } else {
+                    output.setText("Student is not enrolled.");
+                }
+            } else {
+                output.setText(checkProfile + " (" + studentType(studentToAward)
+                        + ") is not eligible for the scholarship.");
+            }
+        } else {
+            output.setText("Student not in roster!");
+        }
+        return null;
+    }
     /**
      * This method checks the validity of a String command inputted by the user relating to
      * the number of completed credits
@@ -180,6 +258,10 @@ public class TuitionManagerController {
      * @return a String representation of the birthDate
      */
     private String birthDate() {
+        if(dob1.getValue() == null) {
+            output.setText("Please enter a date.");
+            return "";
+        }
         String[] date = dob1.getValue().toString().split("-");
         String birthDate = date[1] + "/" + date[2] + "/" + date[0];
         return birthDate;
@@ -208,8 +290,12 @@ public class TuitionManagerController {
     private Profile readProfile() {
         String firstName = firstname.getText();
         String lastName = lastname.getText();
+        if(firstName.isEmpty() || lastName.isEmpty()) {
+            output.setText("Missing name information.");
+            return null;
+        }
         String studentDOB = birthDate();
-        if(!isDate(studentDOB)) {
+        if(studentDOB.isEmpty() || !isDate(studentDOB)) {
             return null;
         }
         Date studentDob = new Date(studentDOB);
@@ -444,5 +530,38 @@ public class TuitionManagerController {
                 output.appendText("\n");
             }
         }
+    }
+    private int readEnrolledCredits(Student enrolled, String input) {
+        if(isNumeric(input)) {
+            int cred = Integer.parseInt(input);
+            if(cred >= 0) {
+                if(enrolled.isValid(cred)) {
+                    return cred;
+                }
+                output.setText("(" + studentType(enrolled) + ") " + cred + ": invalid credit hours.");
+            } else {
+                output.setText("Credits enrolled invalid: cannot be negative!");
+            }
+        } else {
+            output.setText("Credits enrolled is not an integer.");
+        }
+        return -1;
+    }
+    private String studentType(Student inspectStudent) {
+        if(inspectStudent instanceof Resident) {
+            return STUDENTTYPE[0];
+        }
+        if(inspectStudent instanceof TriState) {
+            TriState promoteStudent = (TriState) inspectStudent;
+            return STUDENTTYPE[1] + " " + promoteStudent.state().toUpperCase();
+        }
+        if(inspectStudent instanceof International) {
+            International promoteStudent = (International) inspectStudent;
+            if(promoteStudent.isStudyAbroad()) {
+                return STUDENTTYPE[2] + STUDYABROAD;
+            }
+            return STUDENTTYPE[2];
+        }
+        return STUDENTTYPE[3];
     }
 }

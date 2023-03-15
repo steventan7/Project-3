@@ -91,11 +91,8 @@ public class Roster {
      * @param student the student that is to be added
      * @return true the student is in the roster, false if the student is not in the roster otherwise
      */
-    public boolean contains(Student student){
-        if (find(student) == -1) {
-            return false;
-        }
-        return true;
+    public boolean contains(Student student) {
+        return find(student) != -1;
     }
 
     /**

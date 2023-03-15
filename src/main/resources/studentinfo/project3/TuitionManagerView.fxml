@@ -177,14 +177,14 @@
                               <Insets left="10.0" />
                            </padding>
                         </Label>
-                        <Label prefHeight="19.0" prefWidth="59.0" text="Credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                        <Label prefHeight="19.0" prefWidth="103.0" text="Enrolling Credits" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </Label>
                         <TextField GridPane.columnIndex="1" />
                         <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="enrollingCredits" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <DatePicker fx:id="dob2" prefHeight="0.0" prefWidth="606.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <GridPane maxWidth="350.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                           <columnConstraints>
@@ -195,8 +195,8 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button mnemonicParsing="false" prefWidth="120.0" text="Enroll" />
-                              <Button mnemonicParsing="false" prefWidth="120.0" text="Drop" GridPane.columnIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#enrollStudent" prefWidth="120.0" text="Enroll" />
+                              <Button mnemonicParsing="false" onAction="#dropStudent" prefWidth="120.0" text="Drop" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -208,8 +208,42 @@
           </Tab>
           <Tab text="Scholarship">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane />
             </content>
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.79998779296875" minWidth="10.0" prefWidth="176.59998779296876" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="559.2000122070312" minWidth="10.0" prefWidth="542.2000122070312" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="128.79999999999995" minHeight="10.0" prefHeight="128.79999999999995" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="58.79999771118162" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="62.0" text="First Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="firstname1" GridPane.columnIndex="1" />
+                        <Label prefHeight="19.0" prefWidth="59.0" text="Last Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <TextField fx:id="lastname1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label layoutX="83.0" layoutY="72.0" prefHeight="19.0" prefWidth="76.0" text="Date of Birth" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <DatePicker fx:id="dob11" prefHeight="26.0" prefWidth="546.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Scholarship Amount" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                        <TextField fx:id="scholarshipAmount" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Button mnemonicParsing="false" onAction="#awardScholarship" prefHeight="26.0" prefWidth="191.0" text="Add Scholarship Amount" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </GridPane>
+               </content>
           </Tab>
             <Tab text="Print">
               <content>
@@ -239,7 +273,7 @@
       </TabPane>
    </center>
    <bottom>
-      <TextArea fx:id="output" maxWidth="802.0" prefHeight="146.0" prefWidth="802.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="output" editable="false" maxWidth="802.0" prefHeight="146.0" prefWidth="802.0" BorderPane.alignment="CENTER" />
    </bottom>
    <padding>
       <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
