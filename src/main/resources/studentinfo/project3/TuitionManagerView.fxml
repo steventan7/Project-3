@@ -136,7 +136,7 @@
                               <Button fx:id="addStudent" mnemonicParsing="false" onAction="#addStudent" prefHeight="26.0" prefWidth="94.4" text="Add" GridPane.halignment="LEFT" />
                               <Button fx:id="removeStudent" mnemonicParsing="false" onAction="#removeStudent" prefWidth="94.4" text="Remove" GridPane.columnIndex="1" />
                               <Button fx:id="changeMajor" mnemonicParsing="false" onAction="#changeStudentMajor" prefWidth="94.4" text="Change Major" GridPane.columnIndex="2" />
-                              <Button fx:id="loadFromFile" mnemonicParsing="false" text="Load From File" GridPane.columnIndex="3" />
+                              <Button fx:id="loadFromFile" mnemonicParsing="false" onAction="#importFile" text="Load From File" GridPane.columnIndex="3" />
                            </children>
                            <padding>
                               <Insets right="60.0" />
@@ -215,7 +215,21 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                         <Button fx:id="printRoster" layoutX="41.0" layoutY="14.0" mnemonicParsing="false" onAction="#printRoster" prefHeight="31.0" prefWidth="66.0" text="Roster" />
+                        <GridPane layoutX="88.0" layoutY="49.0" prefHeight="70.0" prefWidth="303.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                               <Button fx:id="printRoster" mnemonicParsing="false" onAction="#printRoster" prefHeight="25.6" prefWidth="101.6" text="Roster" />
+                              <Button mnemonicParsing="false" prefWidth="106.0" text="School/College" GridPane.columnIndex="1" />
+                              <Button mnemonicParsing="false" prefWidth="101.6" text="Enrollment" GridPane.columnIndex="2" />
+                           </children>
+                        </GridPane>
                      </children></AnchorPane>
               </content>
             </Tab>

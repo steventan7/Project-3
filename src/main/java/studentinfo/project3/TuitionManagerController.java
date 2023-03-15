@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.Alert.AlertType;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
 public class TuitionManagerController {
     @FXML
     private Button addStudent, removeStudent, changeMajor, loadSchedule;
@@ -35,6 +40,7 @@ public class TuitionManagerController {
     @FXML
     private ToggleGroup major, isResident, state, homeplace;
 
+    public static final String [] COMMANDS = new String [] {"R", "N", "T", "I"};
     public static final int SIXTEENYEARS = 16;
     private static Roster studentRoster = new Roster();
     private static Enrollment studentEnrollment = new Enrollment();
@@ -326,6 +332,66 @@ public class TuitionManagerController {
             ny.setDisable(true);
             ny.setSelected(false);
         }
+    }
+
+    @FXML
+    void importFile(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open Source File for the Import");
+        chooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"),
+                new ExtensionFilter("All Files", "*.*"));
+        Stage stage = new Stage();
+        File sourceFile = chooser.showOpenDialog(stage);
+        loadList(sourceFile);
+    }
+
+    /**
+     * Loads the list of students in a text file with all the details of a student on each line and adds them
+     * to the student roster.
+     * @param file File object that contains the text file path.
+     */
+    private void loadList(File file) {
+        Scanner openFile;
+        try {
+            openFile = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            output.setText("File not found!");
+            return;
+        }
+        StringTokenizer data;
+        char studentType;
+        while(openFile.hasNextLine()) {
+            data = new StringTokenizer(openFile.nextLine(), ",");
+            studentType = data.nextToken().charAt(0);
+            if(studentType == COMMANDS[0].charAt(0)) {
+                output.setText("Resident...");
+                studentRoster.add(new Resident(readProfile(data), Major.valueOf(data.nextToken().toUpperCase()),
+                        Integer.parseInt(data.nextToken()), 0));
+            } else if(studentType == COMMANDS[1].charAt(0)) {
+                output.setText("Non-Resident...");
+                studentRoster.add(new NonResident(readProfile(data), Major.valueOf(data.nextToken().toUpperCase()),
+                        Integer.parseInt(data.nextToken())));
+            } else if(studentType == COMMANDS[2].charAt(0)) {
+                studentRoster.add(new TriState(readProfile(data), Major.valueOf(data.nextToken().toUpperCase()),
+                        Integer.parseInt(data.nextToken()), data.nextToken()));
+            } else {
+                studentRoster.add(new International(readProfile(data), Major.valueOf(data.nextToken().toUpperCase()),
+                        Integer.parseInt(data.nextToken()), Boolean.parseBoolean(data.nextToken().toLowerCase())));
+            }
+        }
+        output.setText("Students loaded to the roster.");
+    }
+
+    /**
+     * This method checks the validity of a String command inputted by the user relating to the Profile class
+     * @param tokens StringTokenizer that contains Profile information
+     * @return a Profile object if the components inputted by the string command are valid and null if invalid
+     */
+    private Profile readProfile(StringTokenizer tokens) {
+        String firstName = tokens.nextToken();
+        String lastName = tokens.nextToken();
+        String studentDOB = tokens.nextToken();
+        return new Profile(firstName, lastName, studentDOB);
     }
 
     /**
