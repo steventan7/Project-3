@@ -409,4 +409,40 @@ public class TuitionManagerController {
             }
         }
     }
+
+    /**
+     * Prints the student roster in the output TextArea. If the roster is empty, the output TextArea says that
+     * the roster is empty
+     */
+    @FXML
+    void printByStanding(ActionEvent event) {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.printByStanding().split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
+    /**
+     * Prints the student roster in the output TextArea. If the roster is empty, the output TextArea says that
+     * the roster is empty
+     */
+    @FXML
+    void printBySchool(ActionEvent event) {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.printBySchool().split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
 }

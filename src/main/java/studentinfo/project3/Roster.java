@@ -102,6 +102,7 @@ public class Roster {
      * Prints the students by their profiles
      * This method sorts the students by the profiles. This is done by comparing the student's first and
      * last names, as well as their date of births.
+     * @return a String representation of all students in the roster sorted by profile
      */
     public String print() {
         for(int i = 0; i < size - 1; i++) {
@@ -126,8 +127,9 @@ public class Roster {
      * Prints the students in order of their academic standing
      * This method sorts the students by their academic standing. This is done by comparing the number of credits
      * completed
+     * @return a String representation of all students listed by standing
      */
-    public void printByStanding() {
+    public String printByStanding() {
         for(int i = 0; i < size - 1; i++) {
             int min = i;
             for(int j = i + 1; j < size; j++) {
@@ -144,16 +146,19 @@ public class Roster {
             roster[i] = temp;
         }
 
+        String rosterList = "";
         for(int i = 0; i < size; i++) {
-            System.out.println(roster[i]);
+            rosterList += roster[i] + "#";
         }
+        return rosterList;
     }
 
     /**
      * Prints the students in order of their school
      * This method sorts the students by their school. This is done by comparing the student's majors and schools
+     * @return a String representation of all students listed by school
      */
-    public void printBySchool() {
+    public String printBySchool() {
         for(int i = 0; i < size - 1; i++) {
             int min = i;
             for(int j = i + 1; j < size; j++) {
@@ -171,9 +176,11 @@ public class Roster {
             roster[i] = temp;
         }
 
+        String rosterList = "";
         for(int i = 0; i < size; i++) {
-            System.out.println(roster[i]);
+            rosterList += roster[i] + "#";
         }
+        return rosterList;
     }
 
     /**
@@ -181,8 +188,9 @@ public class Roster {
      * This method sorts the students by their profile. This is done by comparing the student's majors and schools
      * Then it prints the students that are in the specified school
      * @param school the specified school for the listing
+     * @return a String representation of all students listed within a specific school
      */
-    public void listBySchool(String school) {
+    public String listBySchool(String school) {
         for(int i = 0; i < size - 1; i++) {
             int min = i;
             for(int j = i + 1; j < size; j++) {
@@ -194,22 +202,27 @@ public class Roster {
             roster[i] = temp;
         }
 
+        String rosterList = "";
         for(int i = 0; i < size; i++) {
             if(roster[i].major().schoolName().toUpperCase().equals(school.toUpperCase())) {
-                System.out.println(roster[i]);
+                rosterList += roster[i] + "#";
             }
         }
+        return rosterList;
     }
 
     /**
      * Prints all the students in the roster that can graduate with the number of credits currently completed.
+     * @return a String representation of all students that can graduate
      */
-    public void printGrads() {
+    public String printGrads() {
+        String rosterList = "";
         for(int i = 0; i < size; i++) {
             if(roster[i].canGraduate()) {
-                System.out.println(roster[i]);
+                rosterList += roster[i] + "#";
             }
         }
+        return rosterList;
     }
 
     /**
