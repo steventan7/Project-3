@@ -185,10 +185,10 @@ public class TuitionManagerController {
             EnrollStudent studentToDrop = new EnrollStudent(profileToDrop, 0);
             if(studentEnrollment.contains(studentToDrop)) {
                 studentEnrollment.remove(studentToDrop);
-                System.out.println(studentToDrop.studentProfile() + " dropped.");
+                output.setText(studentToDrop.studentProfile() + " dropped.");
                 return;
             }
-            System.out.println(profileToDrop + " is not enrolled.");
+            output.setText(profileToDrop + " is not enrolled.");
         }
     }
     @FXML
@@ -279,10 +279,17 @@ public class TuitionManagerController {
      * If the student is not found or the specified details are incorrect, an error message appears
      */
     @FXML
-    void removeStudent(ActionEvent event) {
+    void removeStudent() {
         Profile profileToRemove = readProfile();
         Student studentToRemove = new Resident(profileToRemove, Major.CS, 0, 0);
         if (studentToRemove.studentProfile() != null) {
+            if(isNumeric(enrollingCredits.getText())) {
+                EnrollStudent student = new EnrollStudent(profileToRemove, Integer.parseInt(enrollingCredits.getText()));
+                if (studentEnrollment.contains(student)) {
+                    output.setText("Cannot remove student. Student is currently enrolled!");
+                    return;
+                }
+            }
             if (studentRoster.remove(studentToRemove)) {
                 output.setText(studentToRemove.studentProfile() + " removed from the roster.");
             } else {
