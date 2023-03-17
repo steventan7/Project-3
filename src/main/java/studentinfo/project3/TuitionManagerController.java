@@ -28,13 +28,13 @@ public class TuitionManagerController {
     private CheckBox studyabroad;
 
     @FXML
-    private TextField firstname, lastname, creditscompleted, enrollingCredits, scholarshipAmount;
+    private TextField firstname, firstname1, lastname1, lastname, creditscompleted, enrollingCredits, scholarshipAmount;
 
     @FXML
     private TextArea output;
 
     @FXML
-    private DatePicker dob1;
+    private DatePicker dob1, dob11;
 
     @FXML
     private ToggleGroup major, isResident, state, homeplace;
@@ -194,10 +194,15 @@ public class TuitionManagerController {
     @FXML
     private void awardScholarship(ActionEvent event) {
         Profile profileToAward = readProfile();
+        if(scholarshipAmount.getText().isEmpty()) {
+            output.setText("No scholarship amount inputted.");
+            return;
+        }
         String scholarship = scholarshipAmount.getText();
         if(profileToAward != null && isNumeric(scholarship)) {
             int amount = Integer.parseInt(scholarship);
             Resident residentToAward = isScholarshipEligible(profileToAward);
+            output.appendText("\n" + profileToAward);
             if(0 < amount && amount <= MAXAMOUNT) {
                 if (residentToAward != null) {
                     residentToAward.setScholarship(Integer.parseInt(scholarship));
@@ -206,7 +211,7 @@ public class TuitionManagerController {
             } else {
                 output.setText(amount + ": invalid amount.");
             }
-        } else {
+        } else if(profileToAward != null) {
             output.setText("Amount is not an integer.");
         }
     }
@@ -217,6 +222,7 @@ public class TuitionManagerController {
             if(studentToAward.isResident()) {
                 EnrollStudent dummyObj = new EnrollStudent(studentToAward.studentProfile(), 0);
                 dummyObj = studentEnrollment.enrolledStudent(dummyObj);
+                output.appendText("\n" + dummyObj);
                 if(dummyObj != null &&
                         studentEnrollment.enrolledStudent(dummyObj).credits() >= FULLTIMECREDITMIN) {
                     return (Resident) studentToAward;
@@ -247,8 +253,10 @@ public class TuitionManagerController {
                 return cred;
             }
             output.setText("Credits completed invalid: cannot be negative!");
-        } else {
+        } else if(!input.isEmpty()) {
             output.setText("Credits completed invalid: not an integer!");
+        } else {
+            output.setText("Credits completed missing.");
         }
         return -1;
     }
