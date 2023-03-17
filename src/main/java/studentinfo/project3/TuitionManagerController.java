@@ -191,6 +191,7 @@ public class TuitionManagerController {
             output.setText(profileToDrop + " is not enrolled.");
         }
     }
+
     @FXML
     private void awardScholarship(ActionEvent event) {
         Profile profileToAward = readProfile();
@@ -215,6 +216,7 @@ public class TuitionManagerController {
             output.setText("Amount is not an integer.");
         }
     }
+
     private Resident isScholarshipEligible(Profile checkProfile) {
         Student studentToAward = new Resident(checkProfile, Major.CS, 0, 0);
         studentToAward = studentRoster.student(studentToAward);
@@ -240,6 +242,7 @@ public class TuitionManagerController {
         }
         return null;
     }
+
     /**
      * This method checks the validity of a String command inputted by the user relating to
      * the number of completed credits
@@ -274,6 +277,7 @@ public class TuitionManagerController {
         String birthDate = date[1] + "/" + date[2] + "/" + date[0];
         return birthDate;
     }
+
     /**
      * Removes the specified student from studentRoster when the user clicks on the "Remove" button
      * If the student is not found or the specified details are incorrect, an error message appears
@@ -338,6 +342,7 @@ public class TuitionManagerController {
             output.setText(checkProfile + " is not in the roster.");
         }
     }
+
     /**
      * Checks whether the argument String is in the correct calendar date
      * format (mm/dd/yyyy) with numeric values for day, month, and year.
@@ -546,6 +551,83 @@ public class TuitionManagerController {
             }
         }
     }
+
+    /**
+     * Prints the students in order by last name, first, DOB by RBS students
+     * This method sorts the students by their profile. This is done by comparing the student's majors and schools
+     * Then it prints the students that are in the specified school
+     */
+    @FXML
+    void listByRBS() {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.listBySchool("RBS").split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
+    /**
+     * Prints the students in order by last name, first, DOB by SAS students
+     * This method sorts the students by their profile. This is done by comparing the student's majors and schools
+     * Then it prints the students that are in the specified school
+     */
+    @FXML
+    void listBySAS() {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.listBySchool("SAS").split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
+    /**
+     * Prints the students in order by last name, first, DOB by SC&I students
+     * This method sorts the students by their profile. This is done by comparing the student's majors and schools
+     * Then it prints the students that are in the specified school
+     */
+    @FXML
+    void listBySCI() {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.listBySchool("SC&I").split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
+    /**
+     * Prints the students in order by last name, first, DOB by SOE students
+     * This method sorts the students by their profile. This is done by comparing the student's majors and schools
+     * Then it prints the students that are in the specified school
+     */
+    @FXML
+    void listBySOE() {
+        output.clear();
+        if(studentRoster.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentRoster.listBySchool("SOE").split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
     private int readEnrolledCredits(Student enrolled, String input) {
         if(isNumeric(input)) {
             int cred = Integer.parseInt(input);
@@ -562,6 +644,7 @@ public class TuitionManagerController {
         }
         return -1;
     }
+
     private String studentType(Student inspectStudent) {
         if(inspectStudent instanceof Resident) {
             return STUDENTTYPE[0];
