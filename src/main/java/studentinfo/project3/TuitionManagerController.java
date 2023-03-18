@@ -60,13 +60,23 @@ public class TuitionManagerController {
             if (typeOfStudent.equals("Resident")) {
                 addResident();
             } else {
-                String typeOfNonResidentStudent = ((RadioButton) homeplace.getSelectedToggle()).getText();
-                if (typeOfNonResidentStudent.equals("Tri-State")) {
-                    addTriState();
-                } else if (typeOfNonResidentStudent.equals("International")) {
-                    addInternational();
-                } else {
-                    addNonResident();
+                try {
+                    String typeOfNonResidentStudent = ((RadioButton) homeplace.getSelectedToggle()).getText();
+                    if (typeOfNonResidentStudent.equals("Tri-State")) {
+                        addTriState();
+                    } else if (typeOfNonResidentStudent.equals("International")) {
+                        addInternational();
+                    } else {
+                        addNonResident();
+                    }
+                }
+                catch (Exception e) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Invalid data input");
+                    alert.setHeaderText("Student is selected as Non-Resident. Please select TriState, International," +
+                            "or Neither.");
+                    alert.setContentText("Please enter proper input.");
+                    alert.showAndWait();
                 }
             }
         }
