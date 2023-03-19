@@ -114,11 +114,14 @@ public class Enrollment{
 
     /**
      * Prints the list of enrolled students.
+     * @return a String representation of all the students currently enrolled
      */
-    public void print() {
+    public String print() {
+        String rosterList = "";
         for(int i = 0; i < size; i++) {
-            System.out.println(enrollStudents[i]);
+            rosterList += enrollStudents[i] + "#";
         }
+        return rosterList;
     }
 
     /**
@@ -135,5 +138,21 @@ public class Enrollment{
      */
     public int size() {
         return size;
+    }
+
+    /**
+     * Checks whether the roster array is empty.
+     * @return true if the size of the roster is 0; false otherwise.
+     */
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
+     * Clears the enrollment roster
+     */
+    public void clear() {
+        this.enrollStudents = new EnrollStudent[4];
+        this.size = 0;
     }
 }

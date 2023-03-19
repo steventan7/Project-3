@@ -14,6 +14,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.Alert.AlertType;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -54,7 +55,7 @@ public class TuitionManagerController {
      * the specified data fields
      */
     @FXML
-    void addStudent(ActionEvent event) {
+    void addStudent() {
         try {
             String typeOfStudent = ((RadioButton) isResident.getSelectedToggle()).getText();
             if (typeOfStudent.equals("Resident")) {
@@ -171,7 +172,7 @@ public class TuitionManagerController {
         }
     }
     @FXML
-    private void enrollStudent(ActionEvent event) {
+    private void enrollStudent() {
         Profile profileToEnroll = readProfile();
         if(profileToEnroll != null) {
             Student checkStudent = studentRoster.student(new Resident(profileToEnroll, Major.CS,
@@ -189,7 +190,7 @@ public class TuitionManagerController {
         }
     }
     @FXML
-    private void dropStudent(ActionEvent event) {
+    private void dropStudent() {
         Profile profileToDrop = readProfile();
         if(profileToDrop != null) {
             EnrollStudent studentToDrop = new EnrollStudent(profileToDrop, 0);
@@ -203,7 +204,7 @@ public class TuitionManagerController {
     }
 
     @FXML
-    private void awardScholarship(ActionEvent event) {
+    private void awardScholarship() {
         Profile profileToAward = readProfile();
         if(scholarshipAmount.getText().isEmpty()) {
             output.setText("No scholarship amount inputted.");
@@ -341,7 +342,7 @@ public class TuitionManagerController {
      * This method changes the student's major, given the student's profile and the new major
      */
     @FXML
-    void changeStudentMajor(ActionEvent event) {
+    void changeStudentMajor() {
         Profile checkProfile = readProfile();
         String newMajor = ((RadioButton) major.getSelectedToggle()).getText();
         Student targetStudent = new Resident(checkProfile, Major.CS, 0, 0);
@@ -395,7 +396,7 @@ public class TuitionManagerController {
      * buttons relating to Non-Resident students are disabled and unselected
      */
     @FXML
-    void checkIfResident(ActionEvent event) {
+    void checkIfResident() {
         RadioButton selectedRadioButton = (RadioButton) isResident.getSelectedToggle();
         if((selectedRadioButton).getText().equals("Non-Resident")) {
             neither.setDisable(false);
@@ -425,7 +426,7 @@ public class TuitionManagerController {
      * Study Abroad button is disabled. If the International button is selected, the NY and CT buttons are disabled.
      */
     @FXML
-    void checkIfTriStateOrInternational(ActionEvent event) {
+    void checkIfTriStateOrInternational() {
         RadioButton selectedRadioButton = (RadioButton) homeplace.getSelectedToggle();
         if((selectedRadioButton).getText().equals("Tri-State")) {
             studyabroad.setDisable(true);
@@ -449,7 +450,7 @@ public class TuitionManagerController {
     }
 
     @FXML
-    void importFile(ActionEvent event) {
+    void importFile() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open Source File for the Import");
         chooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"),
@@ -513,7 +514,7 @@ public class TuitionManagerController {
      * the roster is empty
      */
     @FXML
-    void printRoster(ActionEvent event) {
+    void printRoster() {
         output.clear();
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
@@ -531,7 +532,7 @@ public class TuitionManagerController {
      * the roster is empty
      */
     @FXML
-    void printByStanding(ActionEvent event) {
+    void printByStanding() {
         output.clear();
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
@@ -549,7 +550,7 @@ public class TuitionManagerController {
      * the roster is empty
      */
     @FXML
-    void printBySchool(ActionEvent event) {
+    void printBySchool() {
         output.clear();
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
@@ -671,5 +672,82 @@ public class TuitionManagerController {
             return STUDENTTYPE[2];
         }
         return STUDENTTYPE[3];
+    }
+
+    /**
+     * Prints the student roster in the output TextArea. If the roster is empty, the output TextArea says that
+     * the roster is empty
+     */
+    @FXML
+    void printEnrolledStudent() {
+        output.clear();
+        if(studentEnrollment.isEmpty()) {
+            output.setText("Roster is empty");
+        } else {
+            String[] split = studentEnrollment.print().split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+        }
+    }
+
+    /**
+     * Prints the amount of tuition owed by the currently enrolled students alongside with their details.
+     */
+    @FXML
+    void printTuition() {
+        output.clear();
+        if(!studentEnrollment.isEmpty()) {
+            output.appendText("** Tuition due **");
+            output.appendText("\n");
+            for(int j = 0; j < studentEnrollment.size(); j++) {
+                Student dummyStudent = new Resident(studentEnrollment.list()[j].studentProfile(), Major.CS,
+                        0, 0);
+                int enrolledCredits = studentEnrollment.list()[j].credits();
+                String tuitionString = DecimalFormat.getCurrencyInstance().format(studentRoster
+                        .student(dummyStudent).tuitionDue(enrolledCredits));
+                output.appendText(studentEnrollment.list()[j].studentProfile() + " ("
+                        + studentType(studentRoster.student(dummyStudent)) + ") enrolled "
+                        + studentEnrollment.list()[j].credits() + " credits: tuition due: " + tuitionString);
+                output.appendText("\n");
+            }
+            output.appendText("* end of tuition due *");
+        } else {
+            output.setText("Student enrollment is empty!");
+        }
+    }
+
+    /**
+     * Completes the current semester by awarding the credits enrolled by each student in the enrollment list.
+     * If any are eligible to graduate with the amount of current credits, they are printed afterwards.
+     */
+    @FXML
+    void completeSemester() {
+        output.clear();
+        output.appendText("Credits completed has been updated.");
+        output.appendText("\n");
+        boolean existsGrads = false;
+        for(int j = 0; j < studentEnrollment.size(); j++) {
+            Student findStudent = new NonResident(studentEnrollment.list()[j].studentProfile(),
+                    Major.CS, 0);
+            studentRoster.student(findStudent).updateCredits(studentEnrollment.list()[j].credits());
+            if(studentRoster.student(findStudent).canGraduate()) {
+                existsGrads = true;
+            }
+        }
+        if(existsGrads) {
+            output.appendText("** list of students eligible for graduation **");
+            output.appendText("\n");
+            String[] split = studentRoster.printGrads().split("#");
+            for(String student: split) {
+                output.appendText((student));
+                output.appendText("\n");
+            }
+            studentEnrollment.clear();
+            output.appendText("Enrollment roster has been cleared.");
+        } else {
+            output.appendText("No students have graduated...");
+        }
     }
 }
