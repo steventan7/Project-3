@@ -708,8 +708,10 @@ public class TuitionManagerController {
             } else {
                 output.setText("Credits enrolled invalid: cannot be negative!");
             }
-        } else {
+        } else if(!input.isEmpty()) {
             output.setText("Credits enrolled is not an integer.");
+        } else {
+            output.setText("Credits enrolled is missing.");
         }
         return -1;
     }
