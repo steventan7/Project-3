@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 public class TuitionManagerController {
     @FXML
     private Button addStudent, removeStudent, changeMajor, loadSchedule;
-
     @FXML
     private RadioButton resident, nonresident, international, tristate, neither, ny, ct;
 
@@ -29,13 +28,13 @@ public class TuitionManagerController {
     private CheckBox studyabroad;
 
     @FXML
-    private TextField firstname, firstname1, lastname1, lastname, creditscompleted, enrollingCredits, scholarshipAmount;
+    private TextField firstname, lastname, creditscompleted, enrollingCredits, scholarshipAmount;
 
     @FXML
     private TextArea output;
 
     @FXML
-    private DatePicker dob1, dob11;
+    private DatePicker dob1;
 
     @FXML
     private ToggleGroup major, isResident, state, homeplace;
@@ -171,6 +170,11 @@ public class TuitionManagerController {
             }
         }
     }
+    /**
+     * Takes in the user's input arguments to enroll the student specified for the semester. Adds
+     * the student to the enrollment list if the student eligible regarding their credits and is in
+     * the student roster. Prints error messages for invalid input, if any.
+     */
     @FXML
     private void enrollStudent() {
         Profile profileToEnroll = readProfile();
@@ -189,6 +193,10 @@ public class TuitionManagerController {
             }
         }
     }
+    /**
+     * Drops the student that is enrolled for the semester, if in the enrollment list. Prints
+     * error messages for invalid input or if the student is not in the enrollment list.
+     */
     @FXML
     private void dropStudent() {
         Profile profileToDrop = readProfile();
@@ -202,7 +210,10 @@ public class TuitionManagerController {
             output.setText(profileToDrop + " is not enrolled.");
         }
     }
-
+    /**
+     * Awards the specified student with the amount inputted by the user. Prints error messages for invalid
+     * input, if the student is ineligible for the scholarship, or if the student is not in the roster.
+     */
     @FXML
     private void awardScholarship() {
         Profile profileToAward = readProfile();
@@ -227,7 +238,12 @@ public class TuitionManagerController {
             output.setText("Amount is not an integer.");
         }
     }
-
+    /**
+     * Checks if a student is eligible for a scholarship given their profile. Used in junction with
+     * the awardScholarship method. Prints error messages for an invalid Profile, if it is.
+     * @param checkProfile Profile for which to check if eligible for a scholarship.
+     * @return a Resident object if the student is eligible; NULL otherwise.
+     */
     private Resident isScholarshipEligible(Profile checkProfile) {
         Student studentToAward = new Resident(checkProfile, Major.CS, 0, 0);
         studentToAward = studentRoster.student(studentToAward);
@@ -449,6 +465,10 @@ public class TuitionManagerController {
         }
     }
 
+    /**
+     * Open a file dialog for user to select text file containing details of students to be added to the student roster.
+     * Prints an error if no file is selected.
+     */
     @FXML
     void importFile() {
         FileChooser chooser = new FileChooser();
@@ -457,6 +477,10 @@ public class TuitionManagerController {
                 new ExtensionFilter("All Files", "*.*"));
         Stage stage = new Stage();
         File sourceFile = chooser.showOpenDialog(stage);
+        if(sourceFile == null) {
+            output.setText("No text file selected.");
+            return;
+        }
         loadList(sourceFile);
     }
 
@@ -638,7 +662,14 @@ public class TuitionManagerController {
             }
         }
     }
-
+    /**
+     * Takes in a Student object and a String representing the amount of credits the student with
+     * the profile is enrolling with. Prints error messages if the student cannot take these amount of
+     * credits or for invalid input.
+     * @param enrolled Student object to be enrolled with the specified credits.
+     * @param input String representing the amount of enrolling credits.
+     * @return a positive integer if the Student can take those amount of credits; -1 otherwise.
+     */
     private int readEnrolledCredits(Student enrolled, String input) {
         if(isNumeric(input)) {
             int cred = Integer.parseInt(input);
@@ -655,7 +686,11 @@ public class TuitionManagerController {
         }
         return -1;
     }
-
+    /**
+     * Checks for the type of specific student given. Return a String representing that type.
+     * @param inspectStudent the Student object to be checked for the type.
+     * @return String representing the type of Student object given.
+     */
     private String studentType(Student inspectStudent) {
         if(inspectStudent instanceof Resident) {
             return STUDENTTYPE[0];
