@@ -125,14 +125,6 @@ public class Enrollment{
     }
 
     /**
-     * Checks if there are enrolled students.
-     * @return true if the Enrollment array is not empty; false otherwise.
-     */
-    public boolean hasEnrollments() {
-        return size > 0;
-    }
-
-    /**
      * Returns the number of currently enrolled students.
      * @return the size of this enrollment list.
      */
