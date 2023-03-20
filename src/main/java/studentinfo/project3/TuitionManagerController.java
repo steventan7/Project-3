@@ -46,6 +46,8 @@ public class TuitionManagerController {
     public static final int SIXTEENYEARS = 16;
     public static final int FULLTIMECREDITMIN = 12;
     public static final int MAXAMOUNT = 10000;
+    public static final int MAXCREDITS = 24;
+    public static final int MINCREDITS = 3;
     private static Roster studentRoster = new Roster();
     private static Enrollment studentEnrollment = new Enrollment();
 
@@ -225,7 +227,6 @@ public class TuitionManagerController {
         if(profileToAward != null && isNumeric(scholarship)) {
             int amount = Integer.parseInt(scholarship);
             Resident residentToAward = isScholarshipEligible(profileToAward);
-            output.appendText("\n" + profileToAward);
             if(0 < amount && amount <= MAXAMOUNT) {
                 if (residentToAward != null) {
                     residentToAward.setScholarship(Integer.parseInt(scholarship));
@@ -280,6 +281,14 @@ public class TuitionManagerController {
         if(isNumeric(input)) {
             int cred = Integer.parseInt(input);
             if(cred >= 0) {
+                if(cred < MINCREDITS) {
+                    output.setText("Credits completed invalid: cannot be less than 3.");
+                    return -1;
+                }
+                if(cred > MAXCREDITS) {
+                    output.setText("Credits completed invalid: cannot be more than 24.");
+                    return -1;
+                }
                 return cred;
             }
             output.setText("Credits completed invalid: cannot be negative!");

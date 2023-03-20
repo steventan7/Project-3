@@ -57,7 +57,7 @@
                                     <ToggleGroup fx:id="major" />
                                  </toggleGroup></RadioButton>
                               <RadioButton fx:id="cs" mnemonicParsing="false" text="CS" toggleGroup="$major" GridPane.columnIndex="1" />
-                              <RadioButton fx:id="ece" mnemonicParsing="false" text="ECE" toggleGroup="$major" GridPane.columnIndex="2" />
+                              <RadioButton fx:id="ee" mnemonicParsing="false" text="EE" toggleGroup="$major" GridPane.columnIndex="2" />
                               <RadioButton fx:id="iti" mnemonicParsing="false" text="ITI" toggleGroup="$major" GridPane.columnIndex="3" />
                               <RadioButton fx:id="math" mnemonicParsing="false" text="MATH" toggleGroup="$major" GridPane.columnIndex="4" />
                            </children>
