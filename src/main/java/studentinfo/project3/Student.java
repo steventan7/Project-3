@@ -133,7 +133,7 @@ public abstract class Student implements Comparable<Student> {
                 this.major = Major.BAIT;
                 break;
             default:
-                System.out.println("Major code invalid: " + major);
+                break;
         }
     }
 
