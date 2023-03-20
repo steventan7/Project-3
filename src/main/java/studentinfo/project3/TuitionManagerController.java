@@ -7,7 +7,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -18,11 +17,15 @@ import java.text.DecimalFormat;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+/**
+ * This class contains methods that will manage the behavior of the graphical user interface roster
+ *
+ * @author David Fabian, Steven Tan
+ */
 public class TuitionManagerController {
+
     @FXML
-    private Button addStudent, removeStudent, changeMajor, loadSchedule;
-    @FXML
-    private RadioButton resident, nonresident, international, tristate, neither, ny, ct;
+    private RadioButton international, tristate, neither, ny, ct;
 
     @FXML
     private CheckBox studyabroad;
@@ -172,6 +175,7 @@ public class TuitionManagerController {
             }
         }
     }
+
     /**
      * Takes in the user's input arguments to enroll the student specified for the semester. Adds
      * the student to the enrollment list if the student eligible regarding their credits and is in
@@ -195,6 +199,7 @@ public class TuitionManagerController {
             }
         }
     }
+
     /**
      * Drops the student that is enrolled for the semester, if in the enrollment list. Prints
      * error messages for invalid input or if the student is not in the enrollment list.
@@ -212,6 +217,7 @@ public class TuitionManagerController {
             output.setText(profileToDrop + " is not enrolled.");
         }
     }
+
     /**
      * Awards the specified student with the amount inputted by the user. Prints error messages for invalid
      * input, if the student is ineligible for the scholarship, or if the student is not in the roster.
@@ -239,6 +245,7 @@ public class TuitionManagerController {
             output.setText("Amount is not an integer.");
         }
     }
+
     /**
      * Checks if a student is eligible for a scholarship given their profile. Used in junction with
      * the awardScholarship method. Prints error messages for an invalid Profile, if it is.
@@ -607,10 +614,15 @@ public class TuitionManagerController {
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
         } else {
-            String[] split = studentRoster.listBySchool("RBS").split("#");
-            for(String student: split) {
-                output.appendText((student));
-                output.appendText("\n");
+            String rbs = studentRoster.listBySchool("RBS");
+            if (rbs.equals("")) {
+                output.setText("There are no RBS students registered!");
+            } else {
+                String[] split = rbs.split("#");
+                for(String student: split) {
+                    output.appendText((student));
+                    output.appendText("\n");
+                }
             }
         }
     }
@@ -626,10 +638,15 @@ public class TuitionManagerController {
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
         } else {
-            String[] split = studentRoster.listBySchool("SAS").split("#");
-            for(String student: split) {
-                output.appendText((student));
-                output.appendText("\n");
+            String sas = studentRoster.listBySchool("SAS");
+            if (sas.equals("")) {
+                output.setText("There are no SAS students registered!");
+            } else {
+                String[] split = sas.split("#");
+                for(String student: split) {
+                    output.appendText((student));
+                    output.appendText("\n");
+                }
             }
         }
     }
@@ -645,10 +662,15 @@ public class TuitionManagerController {
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
         } else {
-            String[] split = studentRoster.listBySchool("SC&I").split("#");
-            for(String student: split) {
-                output.appendText((student));
-                output.appendText("\n");
+            String sci = studentRoster.listBySchool("SC&I");
+            if (sci.equals("")) {
+                output.setText("There are no SC&I students registered!");
+            } else {
+                String[] split = sci.split("#");
+                for(String student: split) {
+                    output.appendText((student));
+                    output.appendText("\n");
+                }
             }
         }
     }
@@ -664,13 +686,19 @@ public class TuitionManagerController {
         if(studentRoster.isEmpty()) {
             output.setText("Roster is empty");
         } else {
-            String[] split = studentRoster.listBySchool("SOE").split("#");
-            for(String student: split) {
-                output.appendText((student));
-                output.appendText("\n");
+            String soe = studentRoster.listBySchool("SOE");
+            if (soe.equals("")) {
+                output.setText("There are no SOE students registered!");
+            } else {
+                String[] split = soe.split("#");
+                for(String student: split) {
+                    output.appendText((student));
+                    output.appendText("\n");
+                }
             }
         }
     }
+
     /**
      * Takes in a Student object and a String representing the amount of credits the student with
      * the profile is enrolling with. Prints error messages if the student cannot take these amount of
@@ -695,6 +723,7 @@ public class TuitionManagerController {
         }
         return -1;
     }
+
     /**
      * Checks for the type of specific student given. Return a String representing that type.
      * @param inspectStudent the Student object to be checked for the type.
@@ -726,7 +755,7 @@ public class TuitionManagerController {
     void printEnrolledStudent() {
         output.clear();
         if(studentEnrollment.isEmpty()) {
-            output.setText("Roster is empty");
+            output.setText("Student enrollment is empty!");
         } else {
             String[] split = studentEnrollment.print().split("#");
             for(String student: split) {
@@ -769,6 +798,10 @@ public class TuitionManagerController {
     @FXML
     void completeSemester() {
         output.clear();
+        if(studentEnrollment.isEmpty()) {
+            output.setText("Student enrollment is empty!");
+            return;
+        }
         output.appendText("Credits completed has been updated.");
         output.appendText("\n");
         boolean existsGrads = false;
@@ -788,10 +821,11 @@ public class TuitionManagerController {
                 output.appendText((student));
                 output.appendText("\n");
             }
-            studentEnrollment.clear();
-            output.appendText("Enrollment roster has been cleared.");
         } else {
-            output.appendText("No students have graduated...");
+            output.appendText("No students have graduated.");
+            output.appendText("\n");
         }
+        studentEnrollment.clear();
+        output.appendText("Enrollment roster has been cleared.");
     }
 }
